@@ -589,7 +589,9 @@ nav {
     height:25vh;
   }
   .bla{
-    height:451px;
+    min-height:451px;
+    height: auto;
+    width:95vw;
   }
 }
 

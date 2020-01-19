@@ -114,7 +114,7 @@
         }
         else{
 ?>
-        Acest film nu este ăe listă. Du-te la ~ <a href="archive.php"> ARHIVĂ </a> ~
+       <h1> Acest film nu este pe listă. Du-te la ~ <a href="archive.php"> ARHIVĂ </a> ~ </h1>
 <?php       }
        
     }
