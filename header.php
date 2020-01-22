@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ro">
-  <link rel="stylesheet" type="text/css" href="style.css?version=7">
+  <link rel="stylesheet" type="text/css" href="style.css?version=8">
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   <head>
     <meta charset="utf-8">    
     <title>
