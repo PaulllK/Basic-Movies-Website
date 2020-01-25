@@ -550,6 +550,11 @@ nav {
 .genres > .genre:last-of-type{
   margin-left: 24vw;
 }
+
+ul.orig{
+  padding-right: 10px;
+}
+
 @media screen and (min-width: 900px) {
   .genres > .genre:last-of-type{
     margin-left: 37vw;
@@ -630,8 +635,15 @@ nav {
 
 /*star rating :*/
 div.stars {
-  width: 270px;
+  background-color: darkblue;
+  margin:20px;
   display: inline-block;
+  border-style: inset;
+  border-width: 7px;
+  border-color: dimgray;
+  border-bottom-style: groove;
+  border-bottom-width: 10px;
+  border-bottom-color: maroon;
 }
 
 input.star { display: none; }
@@ -663,4 +675,27 @@ label.star:before {
   content: '\f006';
   font-family: FontAwesome;
 }
+label.rank:hover{
+  color: rgb(255, 0, 0);
+  text-shadow: 0 0 20px rgb(206, 255, 70);
+}
+label.rank:before{
+  content: '\f058';
+  font-family: FontAwesome;
+  font-size: 53px;
+  margin: 20px;
+  color: mediumorchid;
+}
+
+div.stea::before{
+  font-family: FontAwesome;
+  content: '\f005';
+  color: #FE7;
+  text-shadow: 0 0 20px #952;
+}
+div.stea{
+  float: right;
+  padding-left: 5px;
+}
+
 /* sf */

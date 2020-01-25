@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ro">
-  <link rel="stylesheet" type="text/css" href="style.css?version=8">
+  <link rel="stylesheet" type="text/css" href="style.css?version=12">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   <head>
     <meta charset="utf-8">    
@@ -19,7 +19,7 @@
      
       <nav>
         <div class="navigare">
-          <img src="images/logo.png" style="width: 86px; float:left; border:none;">
+          <img src="images/logo.png" style="height:10.9vh; width: 86px; float:left; border:none;">
           <div style="height:100%; margin-left:91px;">
             <a href="index.php" class="menu">Home</a>
             <a href="archive.php" class="menu" >Arhiva filme</a>

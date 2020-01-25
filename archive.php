@@ -21,7 +21,11 @@
         $movies=$moviesFiltrate;
         echo "<h1>Best " . $_GET['genre'] . " movies</h1>";
       }
-      else echo '<h1>Best movies</h1>';
+      else{
+        echo '<h1>Nu exista filme din genul \'' . $_GET['genre'] . '\'. Verifică dacă este scris corect în link-ul paginii sau încearcă altul.</h1>'; 
+        require_once('footer.php');
+        exit;
+      } 
 
     }else echo '<h1>Best movies</h1>';
   ?>

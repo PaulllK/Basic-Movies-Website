@@ -1,8 +1,9 @@
 <?php
+    session_start(); //pt ca user-ul sa nu poata da de mai multe ori o nota pana va inchide BROWSER-ul
     require_once('header.php');
     require_once('functions.php');
-
     $movies = json_decode(file_get_contents('https://raw.githubusercontent.com/yegor-sytnyk/movies-list/master/db.json'))->movies;
+    
     if( isset($_GET['movie_id']) && !empty($_GET['movie_id']) ){
 
         function idFilm($val){
@@ -12,7 +13,9 @@
 
         $moviesFiltrate=array_filter($movies , 'idFilm');
         if(count($moviesFiltrate) > 0){
-           $film=reset($moviesFiltrate); 
+           $film=reset($moviesFiltrate);
+           
+           $durataMax=cel_mai_lung_film($movies); 
 ?>
           <h1><?php echo $film->title; ?> </h1>
           <div style="padding-left:20px;" class="bla">
@@ -47,14 +50,12 @@
                         if($minute > 1)echo 's';
                         } //0 minute -> nu afiseaza; mai mult de 1 min -> afiseaza 'minute' la plural
                       ?>
-                    </div>
-                    <!--  
-                      <div class="runtime-bar">
-                        <div class="bara" style="width: <?php echo $film->runtime * 100 / $durataMax; ?>%;">
+                    </div>  
+                    <div class="runtime-bar">
+                      <div class="bara" style="width: <?php echo $film->runtime * 100 / $durataMax; ?>%;">
 
-                        </div>  
-                      </div> 
-                    -->
+                      </div>  
+                    </div> 
                   </div>
                 </h2>
               </li>
@@ -113,20 +114,69 @@
             
           </div>
           <div class="stars">
-            <form action="">
-              <input class="star star-5" id="star-5" type="radio" name="star"/>
-              <label class="star star-5" for="star-5"></label>
-              <input class="star star-4" id="star-4" type="radio" name="star"/>
-              <label class="star star-4" for="star-4"></label>
-              <input class="star star-3" id="star-3" type="radio" name="star"/>
-              <label class="star star-3" for="star-3"></label>
-              <input class="star star-2" id="star-2" type="radio" name="star"/>
-              <label class="star star-2" for="star-2"></label>
-              <input class="star star-1" id="star-1" type="radio" name="star"/>
-              <label class="star star-1" for="star-1"></label>
-            </form>
-          </div>
-<?php           
+          <?php if(!isset($_POST['star'])){  
+                 if( !isset($_SESSION['block_ratings'][$film->id]) ){
+          ?>         
+            <h2 style="padding-left:10px;">
+            <?php
+             $continut=verif_file();
+             if($continut == 0){  
+               echo 'Fii primul care acorda o notă <br> acestui film!'; 
+             }else{
+                if( $continut == 1)
+                  echo 'Fii primul care acorda o notă <br> acestui film!';
+                else echo 'Dă-i o notă filmului!';                 
+              } 
+            ?> 
+            </h2> 
+            <div style="height:60px;">    
+              <form action="single.php?movie_id=<?php echo $film->id; ?>" method="post">
+                <input id="nota" type="submit" class="star"/>
+                <label class="rank" for="nota" style="float:right;"></label>
+                <input class="star star-5" id="star-5" type="radio" name="star" value=5>
+                <label class="star star-5" for="star-5"></label>
+                <input class="star star-4" id="star-4" type="radio" name="star" value=4>
+                <label class="star star-4" for="star-4"></label>
+                <input class="star star-3" id="star-3" type="radio" name="star" value=3>
+                <label class="star star-3" for="star-3"></label>
+                <input class="star star-2" id="star-2" type="radio" name="star" value=2>
+                <label class="star star-2" for="star-2"></label>
+                <input class="star star-1" id="star-1" type="radio" name="star" value=1>
+                <label class="star star-1" for="star-1"></label>            
+              </form>
+            </div>
+<?php    
+                }
+                else{
+?>
+               
+               <?php } 
+              }else if(!empty($_POST['star'])){ 
+                $_SESSION['block_ratings'][$film->id]=1;
+                $continut=verif_file();
+                if($continut == 0)
+                {
+                  $ratings=array();
+                  $ratings[$film->id]=array();            
+                } 
+                else if($continut == 1)$ratings[$film->id]=array();
+                    
+                $ratings[$film->id][]=$_POST['star'];
+                file_put_contents( 'movies_rating.txt' , json_encode($ratings , JSON_PRETTY_PRINT) );
+                $_SESSION['continut'][$film->id]=2;
+              }
+
+              if( isset($_SESSION['continut'][$film->id]) ){
+?>
+              <h2 style="padding: 0px 10px;">Nota a fost înregistrată. Mulțumim!</h2>
+<?php
+                $ratings=json_decode( file_get_contents('movies_rating.txt') , true );
+                media_notelor();
+              }
+              else if($continut == 2)media_notelor(); //in caz ca user-ul nu ii acorda o nota
+          ?>
+          </div> 
+<?php
         }
         else{
 ?>
@@ -136,4 +186,4 @@
     }
     
     require_once('footer.php');
-?>  
+?>

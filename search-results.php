@@ -6,21 +6,15 @@
     $movies = json_decode(file_get_contents('https://raw.githubusercontent.com/yegor-sytnyk/movies-list/master/db.json'))->movies;
     $filme_filtrate=array();
     $durataMax=cel_mai_lung_film($movies);
-    $z=strlen($_GET['s']);
-    if($z < 3){?>
-      <h1>Expresiile căutate trebuie să aibă măcar 3 caractere.</h1>
+    if( strlen($_GET['s']) < 3){?>
+      <h1>Expresiile căutate trebuie să aibă cel puțin 3 caractere.</h1>
 <?php }
     else{
     function in_title($val){
-        global $z;
-        if( stripos($val->title, substr($_GET['s'], 0, $z) ) === false )return 0;
+        if( stripos($val->title, $_GET['s']) === false )return 0;
         else return 1;
     }
-
-    while($z >= 3 && count($filme_filtrate)==0){
-        $filme_filtrate=array_filter($movies,'in_title'); 
-        $z--;
-    }
+    $filme_filtrate=array_filter($movies,'in_title'); 
 ?>
 <?php
     if(count($filme_filtrate) > 0){
