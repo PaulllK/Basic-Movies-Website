@@ -114,19 +114,24 @@
             
           </div>
           <div class="stars">
-          <?php if(!isset($_POST['star'])){  
+          <?php
+
+           $link = db_connect(); //parametrii au valori default
+
+           if ( !$link ) {  
+             die("EROARE DE CONECTARE LA BAZA DE DATE: " . mysqli_connect_error());
+           }
+
+           if( !creeaza_tabel_rating() )echo 'EROARE IN CREAREA TABELULUI \'rating\'.';
+
+           if(!isset($_POST['star'])){  
                  if( !isset($_SESSION['block_ratings'][$film->id]) ){
           ?>         
             <h2 style="padding-left:10px;">
             <?php
-             $continut=verif_file();
-             if($continut == 0){  
-               echo 'Fii primul care acorda o notă <br> acestui film!'; 
-             }else{
-                if( $continut == 1)
-                  echo 'Fii primul care acorda o notă <br> acestui film!';
-                else echo 'Dă-i o notă filmului!';                 
-              } 
+             $nrNote=nr_note($film->title);
+             if($nrNote == 0)echo 'Fii primul care acorda o notă <br> acestui film!'; 
+             else echo 'Dă-i o notă filmului!';                 
             ?> 
             </h2> 
             <div style="height:60px;">    
@@ -147,33 +152,19 @@
             </div>
 <?php    
                 }
-                else{
-?>
-               
-               <?php } 
               }else if(!empty($_POST['star'])){ 
                 $_SESSION['block_ratings'][$film->id]=1;
-                $continut=verif_file();
-                if($continut == 0)
-                {
-                  $ratings=array();
-                  $ratings[$film->id]=array();            
-                } 
-                else if($continut == 1)$ratings[$film->id]=array();
-                    
-                $ratings[$film->id][]=$_POST['star'];
-                file_put_contents( 'movies_rating.txt' , json_encode($ratings , JSON_PRETTY_PRINT) );
-                $_SESSION['continut'][$film->id]=2;
+                adauga_nota( $film->title , $_POST['star'] );
+                ///$_SESSION['continut'][$film->id]=2;
               }
 
-              if( isset($_SESSION['continut'][$film->id]) ){
+              if( isset($_SESSION['block_ratings'][$film->id]) ){
 ?>
               <h2 style="padding: 0px 10px;">Nota a fost înregistrată. Mulțumim!</h2>
 <?php
-                $ratings=json_decode( file_get_contents('movies_rating.txt') , true );
-                media_notelor();
               }
-              else if($continut == 2)media_notelor(); //in caz ca user-ul nu ii acorda o nota
+              if( !isset($nrNote) )$nrNote = nr_note($film->title);
+              if($nrNote > 0)media_notelor($film->title);
           ?>
           </div> 
 <?php

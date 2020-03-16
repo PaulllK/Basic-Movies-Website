@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ro">
-  <link rel="stylesheet" type="text/css" href="style.css?version=12">
+  <link rel="stylesheet" type="text/css" href="style.css?version=13">
   <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
   <head>
     <meta charset="utf-8">    
     <title>
-      <?php  
+      <?php
         if( basename($_SERVER['SCRIPT_NAME'], ".php") == "index" )echo "Home-Movies";
         else echo "Best Movies";
       ?>
@@ -13,7 +13,9 @@
     
   </head>
   <body>
-    <?php require_once('functions.php');  ?>
+    <?php 
+      require_once('functions.php'); 
+    ?>
         
     <header>
      
